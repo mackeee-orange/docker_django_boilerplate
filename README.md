@@ -17,6 +17,12 @@ $ make build_up
 `http://localhost:8000`
 にアクセスすればみれます  
 
+#### 4. 普段`manage.py xxxx`のように使うDjangoのコマンドは
+```bash
+$ make manage
+Input command (below manage.py): ここにうつ
+```
+
 
 ## 基礎フォルダ構造の解説
 ```text
@@ -24,30 +30,24 @@ $ make build_up
 ├── Dockerfile              // アプリケーション自体のDockerfile
 ├── Makefile                // `make XXX`みたいなコマンドでいろんなコマンドを簡略化するためのファいうr
 ├── README.md               // まず読みましょうというもの
-├── app                     // アプリケーションのソースコードが入るフォルダ *1
-│   ├── __init__.py
-│   ├── application.py      // アプリケーションに様々なパッケージを適用して初期化する
-│   ├── config.py           // アプリケーションの設定
-│   ├── database.py         // データベースの初期化
-│   ├── jobs                // 非同期などで実行したいジョブを入れる
-│   │   └── __init__.py
-│   ├── lib                 // アプリ内で使う独自ライブラリなどを配置
-│   │   └── __init__.py
-│   ├── models              // モデルを入れる
-│   │   └── __init__.py
-│   ├── static              // 画像やスタイルシートを入れる
-│   │   ├── img
-│   │   ├── javascript
-│   │   └── stylesheet
-│   ├── tasks.py            // celeryに渡したいジョブやライブラリなどをimport
-│   ├── templates           // テンプレートが入る
-│   ├── tests               // pytestによって実行したいテストを入れる
-│   │   └── __init__.py
-│   └── views               // viewが入る => views.pyのように1つのファイルにしてもいい
-│       └── __init__.py
 ├── docker-compose.yml      
 ├── guniconf.py             // gunicornの設定
-├── run.py                  // 起動用ファイル
+├── manage.py     
+├── .docker                 // アプリケーション以外のdockerで立ち上げるものたち
+│   ├── db
+│   │   ├── initializers/01_createdb.sql    // サーバー立ち上げた時にこの内容によってデフォルトのROLEとDBができる         
+│   │   └── data/           // 実際のデータベースのデータが同期される
+│   ├── nginx
+│   │   ├── app.conf        // Nginxの設定         
+│   │   └── Dockerfile
+│   └── redis               // 非同期ジョブ実行の際に使われる揮発性DB
+├── project                 // プロジェクトのソースコードが入るフォルダ *1
+│   ├── __init__.py
+│   ├── celery.py           // celeryの設定
+│   ├── settings.py         // アプリケーションの設定
+│   ├── urls.py            
+│   └── wsgi.py             // ウェブサーバー立ち上げるためのもの 
+├── templates               // テンプレートがはいる
 └── tmp                     // プログラムによって一時的に生成されるファイルなどを格納する用のフォルダ
     └── sockets             // ソケットファイルがはいる
 
